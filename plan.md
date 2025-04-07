@@ -30,12 +30,12 @@ This document outlines the implementation plan for the Invoice and Proposal Gene
 - [x] Add basic validation for invoice forms
 
 ### Phase 3: Core Functionality - Proposal Generation (Week 2)
-- [ ] Implement data models for Proposal, Timeline, PricingTable
-- [ ] Create form components for proposal creation
-- [ ] Build proposal preview component
-- [ ] Implement local storage for saving proposal drafts
-- [ ] Create PDF generation functionality for proposals
-- [ ] Add basic validation for proposal forms
+- [x] Implement data models for Proposal, Timeline, PricingTable
+- [x] Create form components for proposal creation
+- [x] Build proposal preview component
+- [x] Implement local storage for saving proposal drafts
+- [x] Create PDF generation functionality for proposals
+- [x] Add basic validation for proposal forms
 
 ### Phase 4: Template Management (Week 3)
 - [ ] Design template data structure
