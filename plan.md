@@ -21,13 +21,13 @@ This document outlines the implementation plan for the Invoice and Proposal Gene
 - [x] Create basic component structure
 
 ### Phase 2: Core Functionality - Invoice Generation (Week 1-2)
-- [ ] Implement data models for Invoice, Client, Company, LineItem
-- [ ] Create form components for invoice creation
-- [ ] Implement calculation logic for subtotals, taxes, and totals
-- [ ] Build invoice preview component
-- [ ] Implement local storage for saving invoice drafts
-- [ ] Create PDF generation functionality for invoices
-- [ ] Add basic validation for invoice forms
+- [x] Implement data models for Invoice, Client, Company, LineItem
+- [x] Create form components for invoice creation
+- [x] Implement calculation logic for subtotals, taxes, and totals
+- [x] Build invoice preview component
+- [x] Implement local storage for saving invoice drafts
+- [x] Create PDF generation functionality for invoices
+- [x] Add basic validation for invoice forms
 
 ### Phase 3: Core Functionality - Proposal Generation (Week 2)
 - [ ] Implement data models for Proposal, Timeline, PricingTable

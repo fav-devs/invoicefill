@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, FileText, Mic, Wand2 } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { InvoiceProvider, useInvoice } from '@/context/InvoiceContext';
+import InvoiceDetails from '@/components/forms/InvoiceDetails';
+import LineItemsForm from '@/components/forms/LineItemsForm';
+import NotesTermsForm from '@/components/forms/NotesTermsForm';
+import InvoicePreview from '@/components/preview/InvoicePreview';
+import PdfGenerator from '@/components/preview/PdfGenerator';
 
-const InvoiceNew: React.FC = () => {
+// Inner component that uses the invoice context
+const InvoiceForm: React.FC = () => {
+  const { saveInvoice, resetInvoice } = useInvoice();
+  const previewRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col space-y-2">
@@ -32,29 +41,7 @@ const InvoiceNew: React.FC = () => {
               <CardDescription>Enter the basic information for this invoice</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Invoice Number</label>
-                    <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                      INV-2023-001
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Date</label>
-                    <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                      {new Date().toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Client</label>
-                  <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                    Select a client...
-                  </div>
-                </div>
-              </div>
+              <InvoiceDetails />
             </CardContent>
           </Card>
 
@@ -64,46 +51,8 @@ const InvoiceNew: React.FC = () => {
               <CardDescription>Add the products or services you're billing for</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="rounded-md border">
-                  <div className="grid grid-cols-12 gap-2 p-4 text-sm font-medium">
-                    <div className="col-span-6">Description</div>
-                    <div className="col-span-2">Quantity</div>
-                    <div className="col-span-2">Rate</div>
-                    <div className="col-span-2">Amount</div>
-                  </div>
-                  <Separator />
-                  <div className="grid grid-cols-12 gap-2 p-4 items-center">
-                    <div className="col-span-6">
-                      <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                        Website Development
-                      </div>
-                    </div>
-                    <div className="col-span-2">
-                      <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                        1
-                      </div>
-                    </div>
-                    <div className="col-span-2">
-                      <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                        $1,500.00
-                      </div>
-                    </div>
-                    <div className="col-span-2 font-medium">$1,500.00</div>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <span>Add Line Item</span>
-                </Button>
-              </div>
+              <LineItemsForm />
             </CardContent>
-            <CardFooter className="flex justify-between border-t p-4">
-              <div className="space-y-1">
-                <div className="text-sm">Subtotal: $1,500.00</div>
-                <div className="text-sm">Tax (10%): $150.00</div>
-                <div className="text-base font-bold">Total: $1,650.00</div>
-              </div>
-            </CardFooter>
           </Card>
 
           <Card>
@@ -112,20 +61,7 @@ const InvoiceNew: React.FC = () => {
               <CardDescription>Add any additional information</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Notes</label>
-                  <div className="min-h-[100px] w-full rounded-md border border-input bg-background p-3 text-sm">
-                    Thank you for your business!
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Terms</label>
-                  <div className="min-h-[100px] w-full rounded-md border border-input bg-background p-3 text-sm">
-                    Payment due within 30 days.
-                  </div>
-                </div>
-              </div>
+              <NotesTermsForm />
             </CardContent>
           </Card>
         </div>
@@ -155,23 +91,33 @@ const InvoiceNew: React.FC = () => {
               <CardTitle>Preview</CardTitle>
               <CardDescription>See how your invoice will look</CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center">
-              <div className="border rounded-md w-full aspect-[8.5/11] bg-white flex items-center justify-center">
-                <p className="text-muted-foreground text-sm">Preview will appear here</p>
+            <CardContent className="flex justify-center overflow-auto max-h-[500px]">
+              <div ref={previewRef} className="border rounded-md w-full bg-white">
+                <InvoicePreview />
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Generate PDF</Button>
+              <PdfGenerator previewRef={previewRef} />
             </CardFooter>
           </Card>
         </div>
       </div>
 
       <div className="flex justify-end space-x-4">
+        <Button variant="outline" onClick={resetInvoice}>Reset</Button>
         <Button variant="outline">Save Draft</Button>
-        <Button>Finalize Invoice</Button>
+        <Button onClick={saveInvoice}>Finalize Invoice</Button>
       </div>
     </div>
+  );
+};
+
+// Wrapper component that provides the invoice context
+const InvoiceNew: React.FC = () => {
+  return (
+    <InvoiceProvider>
+      <InvoiceForm />
+    </InvoiceProvider>
   );
 };
 
